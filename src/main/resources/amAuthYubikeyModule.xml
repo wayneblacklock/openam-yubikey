@@ -34,13 +34,13 @@ PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
             serviceHierarchy="/DSAMEConfig/authentication/sunAMAuthYubikeyModuleService"
             i18nFileName="amAuthYubikeyModule"
             revisionNumber="1"
-            i18nKey="sunAMAuthYubikeyModuleServiceDescription">
-
+            i18nKey="sunAMAuthYubikeyModuleServiceDescription"
+            resourceName="yubikeymodule">
             <Organization>
                 <AttributeSchema name="sunAMAuthYubikeyModuleAuthLevel"
                                  type="single"
                                  syntax="number_range" rangeStart="0" rangeEnd="2147483647"
-                                 i18nKey="a500">
+                                 i18nKey="a500" resourceName="authLevel">
                     <DefaultValues>
                         <Value>0</Value>
                     </DefaultValues>
@@ -48,17 +48,17 @@ PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
               <AttributeSchema name="sunAMAuthYubikeyModuleClientID"
                                  type="single"
                                  syntax="number_range" rangeStart="0" rangeEnd="2147483647"
-                                 i18nKey="a101">
+                                 i18nKey="a101" resourceName="clientID">
                 </AttributeSchema>
                 <AttributeSchema name="sunAMAuthYubikeyModuleSecretKey"
                                  type="single"
                                  syntax="string"
-                                 i18nKey="a102">
+                                 i18nKey="a102" resourceName="secretKey">
                 </AttributeSchema>
                 <AttributeSchema name="sunAMAuthYubikeyModuleWSApiUrls"
                                  type="list"
                                  syntax="string"
-                                 i18nKey="a104">
+                                 i18nKey="a104" resourceName="wspApiUrls">
                     <DefaultValues>
                         <Value>https://api.yubico.com/wsapi/2.0/verify</Value>
                         <Value>https://api2.yubico.com/wsapi/2.0/verify</Value>
@@ -71,22 +71,52 @@ PUBLIC "=//iPlanet//Service Management Services (SMS) 1.0 DTD//EN"
                 <AttributeSchema name="sunAMAuthYubikeyModuleYubiKeyAttributeName"
                                  type="single"
                                  syntax="string"
-                                 i18nKey="a103">
+                                 i18nKey="a103" resourceName="attributeName">
                 </AttributeSchema>
 
-                <SubSchema name="serverconfig" inheritance="multiple">
-                    <AttributeSchema name="sunAMAuthYubikeyModuleAuthLevel"
-                                     type="single"
-                                     syntax="number_range" rangeStart="0" rangeEnd="2147483647"
-                                     i18nKey="a500">
-                        <DefaultValues>
-                            <Value>0</Value>
-                        </DefaultValues>
-                    </AttributeSchema>
+                <SubSchema name="serverconfig" inheritance="multiple" resourceName="USE-PARENT">
+
+                  <AttributeSchema name="sunAMAuthYubikeyModuleAuthLevel"
+                                   type="single"
+                                   syntax="number_range" rangeStart="0" rangeEnd="2147483647"
+                                   i18nKey="a500" resourceName="authLevel">
+                      <DefaultValues>
+                          <Value>0</Value>
+                      </DefaultValues>
+                  </AttributeSchema>
+                  <AttributeSchema name="sunAMAuthYubikeyModuleClientID"
+                                   type="single"
+                                   syntax="number_range" rangeStart="0" rangeEnd="2147483647"
+                                   i18nKey="a101" resourceName="clientID">
+                  </AttributeSchema>
+                  <AttributeSchema name="sunAMAuthYubikeyModuleSecretKey"
+                                   type="single"
+                                   syntax="string"
+                                   i18nKey="a102" resourceName="secretKey">
+                  </AttributeSchema>
+                  <AttributeSchema name="sunAMAuthYubikeyModuleWSApiUrls"
+                                   type="list"
+                                   syntax="string"
+                                   i18nKey="a104" resourceName="wspApiUrls">
+                      <DefaultValues>
+                          <Value>https://api.yubico.com/wsapi/2.0/verify</Value>
+                          <Value>https://api2.yubico.com/wsapi/2.0/verify</Value>
+                          <Value>https://api3.yubico.com/wsapi/2.0/verify</Value>
+                          <Value>https://api4.yubico.com/wsapi/2.0/verify</Value>
+                          <Value>https://api5.yubico.com/wsapi/2.0/verify</Value>
+                      </DefaultValues>
+                  </AttributeSchema>
+
+                  <AttributeSchema name="sunAMAuthYubikeyModuleYubiKeyAttributeName"
+                                   type="single"
+                                   syntax="string"
+                                   i18nKey="a103" resourceName="attributeName">
+                  </AttributeSchema>
+
                 </SubSchema>
             </Organization>
         </Schema>
-        
+
         <Configuration>
             <OrganizationConfiguration name="/">
                 <AttributeValuePair>

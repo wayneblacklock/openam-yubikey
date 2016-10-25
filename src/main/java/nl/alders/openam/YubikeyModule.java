@@ -36,9 +36,9 @@ import com.sun.identity.idm.*;
 import com.sun.identity.shared.datastruct.CollectionHelper;
 import com.sun.identity.shared.debug.Debug;
 import com.yubico.client.v2.YubicoClient;
-import com.yubico.client.v2.YubicoResponse;
-import com.yubico.client.v2.YubicoResponseStatus;
-import com.yubico.client.v2.exceptions.YubicoValidationException;
+import com.yubico.client.v2.VerificationResponse;
+import com.yubico.client.v2.ResponseStatus;
+import com.yubico.client.v2.exceptions.YubicoVerificationException;
 import com.yubico.client.v2.exceptions.YubicoValidationFailure;
 import org.apache.commons.lang.StringUtils;
 
@@ -125,6 +125,8 @@ public class YubikeyModule extends AMLoginModule {
      */
     @Override
     public int process(Callback[] callbacks, int state) throws LoginException {
+      debug.message("In YubikeyModule.process()");
+
         try {
             //check for session and get username and UUID
             if (userName == null || userName.length() == 0) {
@@ -177,26 +179,51 @@ public class YubikeyModule extends AMLoginModule {
     }
 
     private boolean checkOTP(String otp) throws AuthLoginException {
+      debug.message("In YubikeyModule.checkOTP()");
+
         AMIdentity id = getIdentity(userName);
         if (id == null) {
             throw new AuthLoginException(BUNDLE_NAME, "authFailed", null);
         }
         String yubiKeyId = getYubiKeyId(id);
+        debug.message("In YubikeyModule.checkOTP() 1");
+
         if (StringUtils.isEmpty(yubiKeyId)) {
             debug.error("Yubikey.checkOTP() : yubikeyID of user : " + userName + " is not a valid value");
             throw new AuthLoginException(BUNDLE_NAME, "authFailed", null);
         }
         try {
-            YubicoClient client = YubicoClient.getClient(this.clientId);
-            if (StringUtils.isNotEmpty(secretKey)) {
-                client.setKey(this.secretKey);
-            }
-            if (wsapiUrls != null && wsapiUrls.length > 0) {
-                client.setWsapiUrls(this.wsapiUrls);
-            }
-            YubicoResponse yubicoResponse = client.verify(otp);
-            return yubicoResponse.getStatus().equals(YubicoResponseStatus.OK) && yubicoResponse.getPublicId().equals(yubiKeyId);
-        } catch (YubicoValidationException e) {
+          debug.message("In YubikeyModule.checkOTP() 2");
+
+          if (StringUtils.isEmpty(secretKey)) {
+            //      client.setKey(this.secretKey);
+            debug.error("Yubikey.checkOTP() : yubii secretKey : " + secretKey + " is not a valid value");
+            throw new AuthLoginException(BUNDLE_NAME, "authFailed", null);
+         }
+         debug.message("In YubikeyModule.checkOTP() 3");
+
+          YubicoClient client = YubicoClient.getClient(clientId, secretKey);
+          debug.message("In YubikeyModule.checkOTP() 4");
+
+
+            //YubicoClient client = YubicoClient.getClient(this.clientId);
+          //  if (StringUtils.isNotEmpty(secretKey)) {
+          //      client.setKey(this.secretKey);
+          //  }
+          //  if (wsapiUrls != null && wsapiUrls.length > 0) {
+          //      client.setWsapiUrls(this.wsapiUrls);
+          //  }
+            VerificationResponse yubicoResponse = client.verify(otp);
+
+            debug.message("In YubikeyModule.checkOTP() 5");
+
+            debug.message("In YubikeyModule response: "+ yubicoResponse.getStatus());
+            debug.message("In YubikeyModule response: "+ yubicoResponse.getPublicId());
+            debug.message("yubiKeyId: "+ yubiKeyId);
+
+
+            return yubicoResponse.getStatus().equals(ResponseStatus.OK) && yubicoResponse.getPublicId().equals(yubiKeyId);
+        } catch (YubicoVerificationException e) {
             throw new AuthLoginException(BUNDLE_NAME, "authFailed", null);
         } catch (YubicoValidationFailure yubicoValidationFailure) {
             throw new AuthLoginException(BUNDLE_NAME, "falidationFailed", new String[]{yubicoValidationFailure.getMessage()});
