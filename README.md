@@ -3,7 +3,11 @@ openam-yubikey
 
 OpenAM Yubikey Authentication module
 
-Authentication module for use with ForgeRock OpenAM (http://forgerock.com/). 
+(With much thanks to https://github.com/ronalders)
+
+Authentication module for use with ForgeRock OpenAM (http://forgerock.com/)
+
+Currently being updated to work with OpenAM 13.5 
 
 The module validated Yubikey OTP agains Yubico YubiCloud validation platform
 See: http://www.yubico.com for more details
@@ -18,6 +22,8 @@ https://upgrade.yubico.com/getapikey/.
 
 Installation instruction of Authentication module on OpenAM instance:
 
+TO BE UPDATED
+
 * Activate ssoadm web interface: Activate ssoadm.jsp (see https://wikis.forgerock.org/confluence/display/openam/Activate+ssoadm.jsp)
 * Go to /openam/ssoadm.jsp?cmd=create-svc
 * Paste in your amAuthYubikeyModule.xml and submit the form
@@ -28,6 +34,5 @@ Installation instruction of Authentication module on OpenAM instance:
 * Copy the openam-yubikey-{version}-jar-with-dependencies.jar to WEB-INF/lib
 * Start the webcontainer
 * Access Control ->  realm ->  Authentication ->  Modules -> you should be able to add a new instance of your module.
-
 
 Configure Yubikey module with apikey and secretkey and OpenAM identity attrubute and your ready for use.
